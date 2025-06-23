@@ -113,8 +113,4 @@ Contributions, issues, and feature requests are welcome! Feel free to open an is
 ---
 
 ## 📄 License
-
 This project is licensed under the MIT License.
-
-```bash
-python download_modrinth.py
