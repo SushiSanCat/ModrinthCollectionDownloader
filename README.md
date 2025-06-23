@@ -27,12 +27,14 @@ This script streamlines the management of large modpacks by fetching mods direct
 ## 🛠️ Usage
 
 1. Download `download_modrinth.py`.
-2. Open a terminal and navigate to the script's directory.
-3. Run the script:
+2. Open the file `download_modrinth.py` as text editor
+3. Modify the Minecraft version, loader, and collection ID to your desired options.
+4. Open a terminal and navigate to the script's directory.
+5. Run the script:
    ```bash
    python download_modrinth.py
    ```
-4. The script will download all mods from the specified Modrinth collection. Downloaded mods will be saved in a folder located alongside `download_modrinth.py`.
+6. The script will download all mods from the specified Modrinth collection. Downloaded mods will be saved in a folder located alongside `download_modrinth.py`.
 
 ### 💡 Default Configuration
 
@@ -60,6 +62,22 @@ python download_modrinth.py --version 1.21.6 --loader fabric --collection HO2Onf
 
 **Q:** Can I use this for Forge or Quilt?  
 **A:** Yes! Just set the loader to `forge` or `quilt` and more!
+
+**Q:** What does the code in `download_modrinth.py` do?  
+**A:**
+- The script is designed to download and update all mods from a Modrinth collection for a specific Minecraft version and mod loader.
+- **Configuration:** At the top, you can set default values for Minecraft version, loader, and collection ID. These can also be provided as command-line arguments.
+- **Argument Parsing:** The script uses `argparse` to handle command-line arguments for collection ID, Minecraft version, loader, download directory, and whether to update existing mods.
+- **Modrinth API Client:** The `ModrinthClient` class handles API requests to Modrinth for collection and mod version data, and downloads mod files.
+- **Directory Setup:** If the target download directory does not exist, it is created automatically.
+- **Existing Mods:** The script checks which mods are already downloaded in the directory to avoid unnecessary downloads (unless updating is requested).
+- **Version Filtering:** For each mod in the collection, it finds the latest version that matches the specified Minecraft version and loader.
+- **Download Logic:** Mods are downloaded with filenames that include their mod ID for clarity. If a mod is updated, the old version is removed.
+- **Multithreading:** Downloads are performed in parallel using a thread pool for faster performance.
+- **User Prompt:** After all downloads are complete, the script waits for the user to press Enter before exiting.
+
+**Q:** Is this a virus?  
+**A:** NO, this script is not a virus. It is open-source and you can read all the code yourself (see `download_modrinth.py`). However, always be careful with scripts from the internet. If someone modifies the code with malicious intent, it could become unsafe. If you can read and understand the code, you can verify its safety yourself before running it.
 
 ## 📝 Supported Minecraft Versions
 
