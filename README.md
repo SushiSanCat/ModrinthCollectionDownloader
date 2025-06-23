@@ -1,5 +1,9 @@
 # 🔃 Modrinth Collection Downloader
 
+## Example of what it looks like on usage:
+<img src="https://github.com/user-attachments/assets/2a54c553-efa7-43d3-bcbd-5cf8676d4fa7" alt="image" width="750"/>
+
+
 A modern Python script to **automatically download and update mods** from a [Modrinth](https://modrinth.com) collection, tailored to your chosen Minecraft version and mod loader (e.g., Fabric, Forge, Quilt).
 
 This script streamlines the management of large modpacks by fetching mods directly via Modrinth's API and organizing them locally.
