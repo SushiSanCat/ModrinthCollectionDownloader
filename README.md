@@ -49,6 +49,24 @@ By default, the script is set to:
 - **Collection ID:** `HO2OnfaY`
 
 You can modify these defaults in the script or via command-line arguments (if supported).
+![Screenshot 2025-06-24 115159](https://github.com/user-attachments/assets/4c7ad3f9-2737-4274-bc59-a44db5195566)
+
+---
+
+## 💡 Best Usage for this Python Script
+
+For the most seamless experience, you can place `download_modrinth.py` directly into your Minecraft directory folder, typically located at:
+
+```
+C:\Users\YOURNAME\AppData\Roaming\.minecraft\
+```
+
+**Why do this?**
+- Whenever you run the script from this location, it will automatically download and update your mods right where Minecraft expects them.
+- The script will also delete old versions of mods to prevent conflicts, so you don't have to manually update or clean up mods one by one!
+- This keeps your mod folder always up-to-date with your chosen Modrinth collection.
+
+**Tip:** Replace `YOURNAME` with your actual Windows username.
 
 ---
 
