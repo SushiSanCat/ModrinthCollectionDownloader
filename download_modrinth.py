@@ -1,8 +1,8 @@
 import sys
 
-MINECRAFT_VERSION = '1.21.6'  # Your desired Minecraft version (e.g., "1.21.4", "1.21.5", "1.21.6")
-LOADER = 'fabric'  # Your desired mod loader (e.g., "fabric", "forge", "quilt", "neoforge")
-COLLECTION_ID = 'HO2OnfaY'  # Your collection ID from the URL (e.g., for https://modrinth.com/collection/HO2OnfaY, the ID is HO2OnfaY)
+MINECRAFT_VERSION = 'EDITYOURVERSIONHERE'  # Your desired Minecraft version (e.g., "1.21.4", "1.21.5", "1.21.6")
+LOADER = 'EDITYOURLOADERHERE'  # Your desired mod loader (e.g., "fabric", "forge", "quilt", "neoforge")
+COLLECTION_ID = 'EDITYOURCOLLECTIONIDHERE'  # Your collection ID from the URL (e.g., for https://modrinth.com/collection/HO2OnfaY, the ID is HO2OnfaY)
 
 sys.argv = ['download_modrinth.py', '-v', MINECRAFT_VERSION, '-l', LOADER, '-c', COLLECTION_ID]
 
