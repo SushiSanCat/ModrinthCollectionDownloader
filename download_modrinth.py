@@ -88,10 +88,14 @@ if args.directory:
 
 def get_existing_mods() -> list[dict]:
     file_names = os.listdir(args.directory)
-    return [
-        {"id": file_name.split(".")[-2], "filename": file_name}
-        for file_name in file_names
-    ]
+    mods = []
+    for file_name in file_names:
+        parts = file_name.split(".")
+        if len(parts) < 2:
+            print(f"Warning: Skipping file with unexpected name format: {file_name}")
+            continue
+        mods.append({"id": parts[-2], "filename": file_name})
+    return mods
 
 
 def get_latest_version(mod_id):
@@ -163,5 +167,9 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
-    input("\nAll tasks finished. Press Enter to exit...")
+    try:
+        main()
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+    finally:
+        input("\nAll tasks finished. Press Enter to exit...")
