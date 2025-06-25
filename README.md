@@ -1,5 +1,6 @@
 # 🔃 Modrinth Collection Downloader
 ![Modrinth Collection Downloader Design1](https://github.com/user-attachments/assets/2bd97296-b995-48a8-b71b-1f42ded61661)
+Tired of downloading your mods one by one? This Python script is perfect for you!
 
 
 
