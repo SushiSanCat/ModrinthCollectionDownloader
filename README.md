@@ -1,4 +1,7 @@
 # 🔃 Modrinth Collection Downloader
+![Modrinth Collection Downloader Design1](https://github.com/user-attachments/assets/2bd97296-b995-48a8-b71b-1f42ded61661)
+
+
 
 ## Example of what it looks like on usage:
 <img src="https://github.com/user-attachments/assets/d613c07d-44f5-47f2-88a8-342d282cd096" alt="image" width="750"/>
