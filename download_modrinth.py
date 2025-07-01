@@ -1,7 +1,7 @@
 import sys
 
 MINECRAFT_VERSION = 'EDITYOURVERSIONHERE'  # Your desired Minecraft version (e.g., "1.21.4", "1.21.5", "1.21.6")
-LOADER = 'EDITYOURLOADERHERE'  # Your desired mod loader (e.g., "fabric", "forge", "quilt", "neoforge")
+LOADER = 'EDITYOURLDRHERE'  # Your desired mod loader (e.g., "fabric", "forge", "quilt", "neoforge")
 COLLECTION_ID = 'EDITYOURCOLLECTIONIDHERE'  # Your collection ID from the URL (e.g., for https://modrinth.com/collection/HO2OnfaY, the ID is HO2OnfaY)
 
 sys.argv = ['download_modrinth.py', '-v', MINECRAFT_VERSION, '-l', LOADER, '-c', COLLECTION_ID]
@@ -123,6 +123,7 @@ def download_mod(mod_id, existing_mods=[]):
         latest_mod = get_latest_version(mod_id)
         if not latest_mod:
             print(f"No version found for {mod_id} with MC_VERSION={args.version} and LOADER={args.loader}")
+            print()
             return
 
         file_to_download: dict | None = next(
@@ -130,6 +131,7 @@ def download_mod(mod_id, existing_mods=[]):
         )
         if not file_to_download:
             print(f"Couldn't find a file to download for {mod_id}")
+            print()
             return
         filename: str = file_to_download["filename"]
         filename_parts = filename.split(".")
@@ -138,16 +140,19 @@ def download_mod(mod_id, existing_mods=[]):
 
         if existing_mod and existing_mod["filename"] == filename_with_id:
             print(f"{filename_with_id} latest version already exists.")
+            print()
             return
 
         print(("UPDATING: " if existing_mod else "DOWNLOADING: ") +
             f"{file_to_download['filename']} | loaders: {latest_mod['loaders']} | game_versions: {latest_mod['game_versions']}")
+        print()
         modrinth_client.download_file(
             file_to_download["url"], f"{args.directory}/{filename_with_id}"
         )
 
         if existing_mod:
             print(f"REMOVING previous version:  {existing_mod['filename']}")
+            print()
             os.remove(f"{args.directory}/{existing_mod['filename']}")
     except Exception as e:
         print(f"Failed to download {mod_id}: {e}")
