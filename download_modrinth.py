@@ -1,7 +1,8 @@
 import sys
+import datetime
 
 MINECRAFT_VERSION = 'EDITYOURVERSIONHERE'  # Your desired Minecraft version (e.g., "1.21.4", "1.21.5", "1.21.6")
-LOADER = 'EDITYOURLDRHERE'  # Your desired mod loader (e.g., "fabric", "forge", "quilt", "neoforge")
+LOADER = 'EDITYOURLOADERHERE'  # Your desired mod loader (e.g., "fabric", "forge", "quilt", "neoforge")
 COLLECTION_ID = 'EDITYOURCOLLECTIONIDHERE'  # Your collection ID from the URL (e.g., for https://modrinth.com/collection/HO2OnfaY, the ID is HO2OnfaY)
 
 sys.argv = ['download_modrinth.py', '-v', MINECRAFT_VERSION, '-l', LOADER, '-c', COLLECTION_ID]
@@ -11,8 +12,6 @@ from concurrent.futures import ThreadPoolExecutor
 import json
 import os
 from urllib import request, error
-
-# LOG_FILE = 'modrinth_download_log.txt'
 
 class ModrinthClient:
 
@@ -81,6 +80,21 @@ def parse_args():
 
 args = parse_args()
 
+# Logging setup
+LOG_DIR = "download_modrinth_logs"
+LOG_DOWNLOADED = "downloaded_mods_logs.txt"
+LOG_UPDATED = "updated_mods_logs.txt"
+LOG_NO_VERSION = "no_version_found_for_mods_logs.txt"
+
+if not os.path.exists(LOG_DIR):
+    os.mkdir(LOG_DIR)
+
+def log_event(filename, message):
+    log_path = os.path.join(LOG_DIR, filename)
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open(log_path, "a", encoding="utf-8") as f:
+        f.write(f"[{timestamp}]\n{message}\n\n")
+
 if args.directory:
     if not os.path.exists(args.directory):
         os.mkdir(args.directory)
@@ -122,8 +136,18 @@ def download_mod(mod_id, existing_mods=[]):
 
         latest_mod = get_latest_version(mod_id)
         if not latest_mod:
-            print(f"No version found for {mod_id} with MC_VERSION={args.version} and LOADER={args.loader}")
-            print()
+            # Try to get the mod name for better error reporting
+            mod_details = modrinth_client.get(f"/v2/project/{mod_id}")
+            mod_name = mod_details["title"] if mod_details and "title" in mod_details else "Unknown"
+            log_message = (
+                f"❌ NO VERSION FOUND FOR:\n"
+                f"🔹 MOD_NAME: {mod_name}\n"
+                f"🆔 MOD_ID: {mod_id}\n"
+                f"🎮 MC_VERSION: {args.version}\n"
+                f"🛠️ LOADER: {args.loader.upper()}"
+            )
+            print(f"\n{log_message}\n")
+            log_event(LOG_NO_VERSION, log_message)
             return
 
         file_to_download: dict | None = next(
@@ -143,7 +167,7 @@ def download_mod(mod_id, existing_mods=[]):
             print()
             return
 
-        print(("UPDATING: " if existing_mod else "DOWNLOADING: ") +
+        print(("💹 UPDATING: " if existing_mod else "✅ DOWNLOADING: ") +
             f"{file_to_download['filename']} | loaders: {latest_mod['loaders']} | game_versions: {latest_mod['game_versions']}")
         print()
         modrinth_client.download_file(
@@ -151,9 +175,33 @@ def download_mod(mod_id, existing_mods=[]):
         )
 
         if existing_mod:
-            print(f"REMOVING previous version:  {existing_mod['filename']}")
+            print(f"🚫 REMOVING previous version:  {existing_mod['filename']}")
             print()
             os.remove(f"{args.directory}/{existing_mod['filename']}")
+            mod_details = modrinth_client.get(f"/v2/project/{mod_id}")
+            mod_name = mod_details["title"] if mod_details and "title" in mod_details else mod_id
+            log_message = (
+                f"💹 UPDATED MOD:\n"
+                f"🔹 MOD_NAME: {mod_name}\n"
+                f"🆔 MOD_ID: {mod_id}\n"
+                f"🎮 MC_VERSION: {args.version}\n"
+                f"🛠️ LOADER: {args.loader.upper()}\n"
+                f"📄 NEW_FILE: {filename_with_id}"
+            )
+            log_event(LOG_UPDATED, log_message)
+        else:
+            # Log first time download
+            mod_details = modrinth_client.get(f"/v2/project/{mod_id}")
+            mod_name = mod_details["title"] if mod_details and "title" in mod_details else mod_id
+            log_message = (
+                f"✅ DOWNLOADED MOD:\n"
+                f"🔹 MOD_NAME: {mod_name}\n"
+                f"🆔 MOD_ID: {mod_id}\n"
+                f"🎮 MC_VERSION: {args.version}\n"
+                f"🛠️ LOADER: {args.loader.upper()}\n"
+                f"📄 FILE: {filename_with_id}"
+            )
+            log_event(LOG_DOWNLOADED, log_message)
     except Exception as e:
         print(f"Failed to download {mod_id}: {e}")
 
