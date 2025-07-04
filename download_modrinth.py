@@ -92,9 +92,20 @@ if not os.path.exists(LOG_DIR):
 
 def log_event(filename, message):
     log_path = os.path.join(LOG_DIR, filename)
+    # Count existing entries
+    entry_count = 0
+    if os.path.exists(log_path):
+        with open(log_path, "r", encoding="utf-8") as f:
+            for line in f:
+                # Count lines that start with a number and a dot, e.g., '1. ['
+                if line.strip().startswith(f"{entry_count + 1}. [") or (entry_count == 0 and line.strip().startswith("1. [")):
+                    entry_count += 1
+                elif line.strip() and line.strip()[0].isdigit() and ". [" in line:
+                    entry_count += 1
+    entry_count += 1  # For the new entry
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open(log_path, "a", encoding="utf-8") as f:
-        f.write(f"[{timestamp}]\n{message}\n\n")
+        f.write(f"{entry_count}. [{timestamp}]\n{message}\n\n")
 
 if args.directory:
     if not os.path.exists(args.directory):
