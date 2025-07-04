@@ -85,6 +85,7 @@ LOG_DIR = "download_modrinth_logs"
 LOG_DOWNLOADED = "downloaded_mods_logs.txt"
 LOG_UPDATED = "updated_mods_logs.txt"
 LOG_NO_VERSION = "no_version_found_for_mods_logs.txt"
+LOG_ALREADY_EXISTS = "already_existing_mods_logs.txt"
 
 if not os.path.exists(LOG_DIR):
     os.mkdir(LOG_DIR)
@@ -163,8 +164,20 @@ def download_mod(mod_id, existing_mods=[]):
         filename_with_id = ".".join(filename_parts)
 
         if existing_mod and existing_mod["filename"] == filename_with_id:
-            print(f"{filename_with_id} latest version already exists.")
+            print(f"{filename_with_id} LATEST VERSION ALREADY EXISTS. ⏩")
             print()
+            # Log already existing mod
+            mod_details = modrinth_client.get(f"/v2/project/{mod_id}")
+            mod_name = mod_details["title"] if mod_details and "title" in mod_details else mod_id
+            log_message = (
+                f"⏩ ALREADY EXISTS (UPDATED):\n"
+                f"🔹 MOD_NAME: {mod_name}\n"
+                f"🆔 MOD_ID: {mod_id}\n"
+                f"🎮 MC_VERSION: {args.version}\n"
+                f"🛠️ LOADER: {args.loader.upper()}\n"
+                f"📄 FILE: {filename_with_id}"
+            )
+            log_event(LOG_ALREADY_EXISTS, log_message)
             return
 
         print(("💹 UPDATING: " if existing_mod else "✅ DOWNLOADING: ") +
@@ -175,7 +188,7 @@ def download_mod(mod_id, existing_mods=[]):
         )
 
         if existing_mod:
-            print(f"🚫 REMOVING previous version:  {existing_mod['filename']}")
+            print(f"🚫 REMOVING PREVIOUS VERSION:  {existing_mod['filename']}")
             print()
             os.remove(f"{args.directory}/{existing_mod['filename']}")
             mod_details = modrinth_client.get(f"/v2/project/{mod_id}")
