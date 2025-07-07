@@ -81,7 +81,7 @@ def parse_args():
 args = parse_args()
 
 # Logging setup
-LOG_DIR = "download_modrinth_logs"
+LOG_DIR = "modrinth_collection_downloader_logs"
 LOG_DOWNLOADED = "downloaded_mods_logs.txt"
 LOG_UPDATED = "updated_mods_logs.txt"
 LOG_NO_VERSION = "no_version_found_for_mods_logs.txt"
