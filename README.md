@@ -35,15 +35,15 @@ This script streamlines the management of large modpacks by fetching mods direct
 
 ## 🛠️ Usage
 
-1. Download `download_modrinth.py`.
-2. Open the file `download_modrinth.py` as text editor
+1. Download `modrinth_collection_downloader.py`.
+2. Open the file `modrinth_collection_downloader.py` as text editor
 3. Modify the Minecraft version, loader, and collection ID to your desired options.
 4. Open a terminal and navigate to the script's directory.
 5. Run the script:
    ```bash
-   python download_modrinth.py
+   python modrinth_collection_downloader.py
    ```
-6. The script will download all mods from the specified Modrinth collection. Downloaded mods will be saved in a folder located alongside `download_modrinth.py`.
+6. The script will download all mods from the specified Modrinth collection. Downloaded mods will be saved in a folder located alongside `modrinth_collection_downloader.py`.
 
 ### 💡 Example Configuration
 
@@ -58,7 +58,7 @@ You can modify these in the script or via command-line arguments (if supported).
 
 ## 💡 Best Usage for this Python Script
 
-For the most seamless experience, you can place `download_modrinth.py` directly into your Minecraft directory folder, typically located at:
+For the most seamless experience, you can place `modrinth_collection_downloader.py` directly into your Minecraft directory folder, typically located at:
 
 ```
 C:\Users\YOURNAME\AppData\Roaming\.minecraft\
@@ -76,7 +76,7 @@ C:\Users\YOURNAME\AppData\Roaming\.minecraft\
 ## 📖 Example
 
 ```bash
-python download_modrinth.py --version 1.21.6 --loader fabric --collection HO2OnfaY
+python modrinth_collection_downloader.py --version 1.21.6 --loader fabric --collection HO2OnfaY
 ```
 
 ---
@@ -98,9 +98,9 @@ Yes! Just set the loader to `forge` or `quilt` and more!
 </details>
 
 <details>
-<summary><strong>What does the code in <code>download_modrinth.py</code> do?</strong></summary>
+<summary><strong>What does the code in <code>modrinth_collection_downloader.py</code> do?</strong></summary>
 
-# 📦 Script Explanation: `download_modrinth.py`
+# 📦 Script Explanation: `modrinth_collection_downloader.py`
 
 This script automates downloading and updating Minecraft mods from a Modrinth collection, supporting version and loader selection, logging, and safe updating.
 
@@ -123,7 +123,7 @@ COLLECTION_ID = 'EDITYOURCOLLECTIONIDHERE'
   _Edit these values or use command-line arguments._
 
 ```python
-sys.argv = ['download_modrinth.py', '-v', MINECRAFT_VERSION, '-l', LOADER, '-c', COLLECTION_ID]
+sys.argv = ['modrinth_collection_downloader.py', '-v', MINECRAFT_VERSION, '-l', LOADER, '-c', COLLECTION_ID]
 ```
 - **Default Arguments**: Allows the script to run with default values if not called from the command line.
 
@@ -174,7 +174,7 @@ sys.argv = ['download_modrinth.py', '-v', MINECRAFT_VERSION, '-l', LOADER, '-c',
 - **Purpose:** Sets up log file names and directory.
 
 ```python
-LOG_DIR = "download_modrinth_logs"
+LOG_DIR = "modrinth_collection_downloader_logs"
 LOG_DOWNLOADED = "downloaded_mods_logs.txt"
 LOG_UPDATED = "updated_mods_logs.txt"
 LOG_NO_VERSION = "no_version_found_for_mods_logs.txt"
@@ -237,7 +237,7 @@ LOG_NO_VERSION = "no_version_found_for_mods_logs.txt"
   1. Edit the constants at the top or use command-line arguments.
   2. Run the script.
   3. Mods are downloaded/updated in the specified directory.
-  4. Logs are saved in the `download_modrinth_logs` directory.
+  4. Logs are saved in the `modrinth_collection_downloader_logs` directory.
 
 ---
 
@@ -246,7 +246,7 @@ LOG_NO_VERSION = "no_version_found_for_mods_logs.txt"
 <details>
 <summary><strong>Is this a virus?</strong></summary>
 
-NO, this script is not a virus. It is open-source and you can read all the code yourself (see `download_modrinth.py`). However, always be careful with scripts from the internet. If someone modifies the code with malicious intent, it could become unsafe. If you can read and understand the code, you can verify its safety yourself before running it.
+NO, this script is not a virus. It is open-source and you can read all the code yourself (see `modrinth_collection_downloader.py`). However, always be careful with scripts from the internet. If someone modifies the code with malicious intent, it could become unsafe. If you can read and understand the code, you can verify its safety yourself before running it.
 
 </details>
 
