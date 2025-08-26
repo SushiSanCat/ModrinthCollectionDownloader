@@ -2,7 +2,7 @@ import sys
 import datetime
 
 MINECRAFT_VERSION = 'EDITYOURVERSIONHERE'  # Your desired Minecraft version (e.g., "1.21.4", "1.21.5", "1.21.6")
-LOADER = 'EDITYOURLOADERHERE'  # Your desired mod loader (e.g., "fabric", "forge", "quilt", "neoforge")
+LOADER = 'fabric'  # Your desired mod loader (e.g., "fabric", "forge", "quilt", "neoforge")
 COLLECTION_ID = 'EDITYOURCOLLECTIONIDHERE'  # Your collection ID from the URL (e.g., for https://modrinth.com/collection/HO2OnfaY, the ID is HO2OnfaY)
 
 sys.argv = ['download_modrinth.py', '-v', MINECRAFT_VERSION, '-l', LOADER, '-c', COLLECTION_ID]
@@ -12,6 +12,15 @@ from concurrent.futures import ThreadPoolExecutor
 import json
 import os
 from urllib import request, error
+
+# Statistics tracking variables
+stats = {
+    'total_checked': 0,
+    'total_updated': 0,
+    'total_already_exist': 0,
+    'total_no_version': 0,
+    'total_downloaded': 0
+}
 
 class ModrinthClient:
 
@@ -144,6 +153,7 @@ def get_latest_version(mod_id):
 
 def download_mod(mod_id, existing_mods=[]):
     try:
+        stats['total_checked'] += 1
         existing_mod = next((mod for mod in existing_mods if mod["id"] == mod_id), None)
 
         latest_mod = get_latest_version(mod_id)
@@ -160,6 +170,7 @@ def download_mod(mod_id, existing_mods=[]):
             )
             print(f"\n{log_message}\n")
             log_event(LOG_NO_VERSION, log_message)
+            stats['total_no_version'] += 1
             return
 
         file_to_download: dict | None = next(
@@ -189,6 +200,7 @@ def download_mod(mod_id, existing_mods=[]):
                 f"📄 FILE: {filename_with_id}"
             )
             log_event(LOG_ALREADY_EXISTS, log_message)
+            stats['total_already_exist'] += 1
             return
 
         print(("💹 UPDATING: " if existing_mod else "✅ DOWNLOADING: ") +
@@ -213,6 +225,7 @@ def download_mod(mod_id, existing_mods=[]):
                 f"📄 NEW_FILE: {filename_with_id}"
             )
             log_event(LOG_UPDATED, log_message)
+            stats['total_updated'] += 1
         else:
             # Log first time download
             mod_details = modrinth_client.get(f"/v2/project/{mod_id}")
@@ -226,9 +239,22 @@ def download_mod(mod_id, existing_mods=[]):
                 f"📄 FILE: {filename_with_id}"
             )
             log_event(LOG_DOWNLOADED, log_message)
+            stats['total_downloaded'] += 1
     except Exception as e:
         print(f"Failed to download {mod_id}: {e}")
 
+
+def display_final_statistics():
+    """Display final statistics after all tasks are completed."""
+    print("\n" + "="*60)
+    print("📊 FINAL STATISTICS")
+    print("="*60)
+    print(f"🔍 Total mods checked: {stats['total_checked']}")
+    print(f"💹 Total mods updated: {stats['total_updated']}")
+    print(f"⏩ Total mods already exist: {stats['total_already_exist']}")
+    print(f"❌ Total mods with no version found: {stats['total_no_version']}")
+    print(f"✅ Total mods newly downloaded: {stats['total_downloaded']}")
+    print("="*60)
 
 def main():
     collection_details = modrinth_client.get_collection(args.collection)
@@ -237,10 +263,15 @@ def main():
         return
     mods: str = collection_details["projects"]
     print(f"Mods in collection: {mods}")
+    print(f"📦 Total mods to check: {len(mods)}")
+    print()
     existing_mods = get_existing_mods()
 
     with ThreadPoolExecutor(max_workers=5) as executor:
         executor.map(download_mod, mods, [existing_mods] * len(mods))
+    
+    # Display final statistics
+    display_final_statistics()
 
 
 if __name__ == "__main__":
