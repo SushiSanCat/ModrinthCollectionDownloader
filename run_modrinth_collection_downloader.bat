@@ -1,0 +1,1 @@
+python ./modrinth_collection_downloader.py --version 1.21.8 --loader fabric --collection vK0zMKe7
