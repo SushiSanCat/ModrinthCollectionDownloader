@@ -6,6 +6,8 @@ Tired of downloading your mods one by one? This Python script is perfect for you
 
 ## Example of what it looks like on usage:
 <img src="https://github.com/user-attachments/assets/d613c07d-44f5-47f2-88a8-342d282cd096" alt="image" width="750"/>
+![Demo](assets/example_usage.gif)
+
 
 
 
