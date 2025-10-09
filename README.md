@@ -5,10 +5,7 @@ Tired of downloading your mods one by one? This Python script is perfect for you
 
 
 ## Example of what it looks like on usage:
-<img src="https://github.com/user-attachments/assets/d613c07d-44f5-47f2-88a8-342d282cd096" alt="image" width="750"/>
-![Demo](assets/example_usage.gif)
-
-
+![Demo](https://i.imgur.com/vBbn2IB.gif)
 
 
 A modern Python script to **automatically download and update mods** from a [Modrinth](https://modrinth.com) collection, tailored to your chosen Minecraft version and mod loader (e.g., Fabric, Forge, Quilt).
@@ -38,23 +35,22 @@ This script streamlines the management of large modpacks by fetching mods direct
 ## 🛠️ Usage
 
 1. Download `modrinth_collection_downloader.py`.
-2. Open the file `modrinth_collection_downloader.py` as text editor
-3. Modify the Minecraft version, loader, and collection ID to your desired options.
-4. Open a terminal and navigate to the script's directory.
-5. Run the script:
+2. Open a terminal and navigate to the script's directory.
+3. Run the script with your desired options:
    ```bash
-   python modrinth_collection_downloader.py
+   python modrinth_collection_downloader.py --version 1.21.9 --loader fabric --collection HO2OnfaY
    ```
-6. The script will download all mods from the specified Modrinth collection. Downloaded mods will be saved in a folder located alongside `modrinth_collection_downloader.py`.
+4. The script will download all mods from the specified Modrinth collection. Downloaded mods will be saved in a folder located alongside `modrinth_collection_downloader.py`.
 
 ### 💡 Example Configuration
 
-- **Minecraft Version:** `1.21.7`
+- **Minecraft Version:** `1.21.9` (or any other valid Minecraft version)
 - **Loader:** `fabric`
 - **Collection ID:** `HO2OnfaY`
 
-You can modify these in the script or via command-line arguments (if supported).
 ![Screenshot 2025-06-24 115159](https://github.com/user-attachments/assets/4c7ad3f9-2737-4274-bc59-a44db5195566)
+
+> **Note:** In previous versions of this script, you needed to manually edit the Python file to configure the version, loader, and collection ID. This is no longer necessary as the script now properly supports command-line arguments as the primary method of configuration.
 
 ---
 
@@ -78,8 +74,14 @@ C:\Users\YOURNAME\AppData\Roaming\.minecraft\
 ## 📖 Example
 
 ```bash
-python modrinth_collection_downloader.py --version 1.21.6 --loader fabric --collection HO2OnfaY
+python modrinth_collection_downloader.py --version 1.21.9 --loader fabric --collection HO2OnfaY
 ```
+
+### 💡 Additional Arguments
+
+- **API Base URL:** `--api-base-url` - Specify a custom Modrinth API base URL (default: https://api.modrinth.com)
+- **Update Mode:** `-u` or `--update` - Download and update existing mods
+- **Download Directory:** `-d` or `--directory` - Specify where to download mods (default: "./mods")
 
 ---
 
@@ -117,23 +119,14 @@ import datetime
 - **Standard Python modules** for system operations and date/time handling.
 
 ```python
-MINECRAFT_VERSION = 'EDITYOURVERSIONHERE'
-LOADER = 'EDITYOURLOADERHERE'
-COLLECTION_ID = 'EDITYOURCOLLECTIONIDHERE'
+import argparse
 ```
-- **Constants**: Placeholders for Minecraft version, mod loader, and Modrinth collection ID.  
-  _Edit these values or use command-line arguments._
-
-```python
-sys.argv = ['modrinth_collection_downloader.py', '-v', MINECRAFT_VERSION, '-l', LOADER, '-c', COLLECTION_ID]
-```
-- **Default Arguments**: Allows the script to run with default values if not called from the command line.
+- **Command-line argument parsing** for flexible configuration.
 
 ---
 
 ## 2. 📚 Additional Imports
 
-- `argparse`: For parsing command-line arguments.
 - `ThreadPoolExecutor`: For parallel downloads.
 - `json`: For handling API responses.
 - `os`: For file and directory operations.
@@ -146,7 +139,7 @@ sys.argv = ['modrinth_collection_downloader.py', '-v', MINECRAFT_VERSION, '-l', 
 **Purpose:** Encapsulates all API interactions with Modrinth.
 
 **Methods:**
-- `__init__`: Sets the base API URL.
+- `__init__(base_url)`: Sets the base API URL (configurable).
 - `get(url)`: Makes a GET request to the Modrinth API and returns JSON data.
 - `download_file(url, filename)`: Downloads a file from a URL to a local filename.
 - `get_mod_version(mod_id)`: Gets all versions for a mod.
@@ -168,6 +161,9 @@ sys.argv = ['modrinth_collection_downloader.py', '-v', MINECRAFT_VERSION, '-l', 
 - **Loader** (`-l`)
 - **Download directory** (`-d`)
 - **Update mode** (`-u`)
+- **API Base URL** (`--api-base-url`)
+
+**Validation:** The script validates both loader and version parameters to ensure they meet expected formats.
 
 ---
 
@@ -201,6 +197,7 @@ LOG_NO_VERSION = "no_version_found_for_mods_logs.txt"
 ## 9. ⬇️ Latest Version Fetching
 
 - **Purpose:** Fetches all versions for a mod and selects the latest one matching the specified Minecraft version and loader.
+- **Enhanced Error Handling:** Improved error handling and data structure validation.
 
 ---
 
@@ -211,6 +208,7 @@ LOG_NO_VERSION = "no_version_found_for_mods_logs.txt"
 - Downloads the latest version if needed.
 - Removes old versions if updating.
 - Logs all actions and errors.
+- **Atomic Operations:** Uses atomic file operations to prevent corruption during updates.
 
 ---
 
@@ -227,6 +225,7 @@ LOG_NO_VERSION = "no_version_found_for_mods_logs.txt"
 ## 12. ▶️ Script Entry Point
 
 **Purpose:** Runs the main function, handles unexpected errors, and waits for user input before exiting.
+- **User-Friendly Exit:** Script now pauses at the end of both successful runs and error cases, waiting for user input before closing.
 
 ---
 
@@ -236,10 +235,9 @@ LOG_NO_VERSION = "no_version_found_for_mods_logs.txt"
   Downloads and updates all mods from a specified Modrinth collection for a given Minecraft version and loader, with logging and safe updating.
 
 - **How to use:**
-  1. Edit the constants at the top or use command-line arguments.
-  2. Run the script.
-  3. Mods are downloaded/updated in the specified directory.
-  4. Logs are saved in the `modrinth_collection_downloader_logs` directory.
+  1. Run the script with command-line arguments for version, loader, and collection.
+  2. Mods are downloaded/updated in the specified directory.
+  3. Logs are saved in the `modrinth_collection_downloader_logs` directory.
 
 ---
 
@@ -254,17 +252,21 @@ NO, this script is not a virus. It is open-source and you can read all the code 
 
 ## 📝 Supported Minecraft Versions
 
-| 1.21.7   | 1.20.4 | 1.19.3 | 1.18.1 | 1.17   |
+The script supports **any Minecraft version** that is available on Modrinth collections. This includes but is not limited to:
+
+| 1.21.9   | 1.20.4 | 1.19.3 | 1.18.1 | 1.17   |
 |----------|--------|--------|--------|--------|
-| 1.21.6   | 1.20.3 | 1.19.2 | 1.18   | 1.16.5 |
-| 1.21.5   | 1.20.2 | 1.19.1 | 1.17.1 | 1.16.4 |
-| 1.21.4   | 1.20.1 | 1.19   | 1.16.5 | 1.16.3 |
-| 1.21.3   | 1.20   | 1.18.2 | 1.16.2 | 1.16.1 |
-| 1.21.2   | 1.19.4 | 1.18   | 1.16   |        |
+| 1.21.8   | 1.20.3 | 1.19.2 | 1.18   | 1.16.5 |
+| 1.21.7   | 1.20.2 | 1.19.1 | 1.17.1 | 1.16.4 |
+| 1.21.6   | 1.20.1 | 1.19   | 1.16.5 | 1.16.3 |
+| 1.21.5   | 1.20   | 1.18.2 | 1.16.2 | 1.16.1 |
+| 1.21.4   | 1.19.4 | 1.18   | 1.16   |        |
+| 1.21.3   |        |        |        |        |
+| 1.21.2   |        |        |        |        |
 | 1.21.1   |        |        |        |        |
 | 1.21     |        |        |        |        |
 
-(and more, as supported by Modrinth collections)
+> **Note:** The script will work with any Minecraft version that Modrinth supports. The table above shows commonly used versions, but you can specify any valid Minecraft version when running the script. The script validates version formats to ensure they match standard Minecraft version patterns.
 
 ## 📝 Supported Loaders
 
@@ -273,6 +275,8 @@ NO, this script is not a virus. It is open-source and you can read all the code 
 | neoforge   | liteloader | rift       |
 
 (and more, as supported by Modrinth collections)
+
+> **Note:** The script validates loader parameters against a list of commonly supported loaders: forge, fabric, quilt, neoforge, and liteloader.
 
 ---
 
