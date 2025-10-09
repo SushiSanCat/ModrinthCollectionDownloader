@@ -5,7 +5,9 @@ Tired of downloading your mods one by one? This Python script is perfect for you
 
 
 ## Example of what it looks like on usage:
-![Demo](https://i.imgur.com/vBbn2IB.gif)
+![GIF](https://i.imgur.com/t2oFCtz.gif)
+<img width="1919" height="1078" alt="image" src="https://github.com/user-attachments/assets/a04605d6-00f9-48bf-adc7-662d53369c38" />
+
 
 
 A modern Python script to **automatically download and update mods** from a [Modrinth](https://modrinth.com) collection, tailored to your chosen Minecraft version and mod loader (e.g., Fabric, Forge, Quilt).
