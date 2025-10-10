@@ -5,8 +5,9 @@ Tired of downloading your mods one by one? This Python script is perfect for you
 
 
 ## Example of what it looks like on usage:
-![GIF](https://i.imgur.com/t2oFCtz.gif)
+![GIF](https://i.imgur.com/hFvhyWp.gif)
 <img width="1919" height="1078" alt="image" src="https://github.com/user-attachments/assets/a04605d6-00f9-48bf-adc7-662d53369c38" />
+[🎥Click here to see Example Usage GIF](https://i.imgur.com/hFvhyWp.gif)
 
 
 
@@ -40,17 +41,18 @@ This script streamlines the management of large modpacks by fetching mods direct
 2. Open a terminal and navigate to the script's directory.
 3. Run the script with your desired options:
    ```bash
-   python modrinth_collection_downloader.py --version 1.21.9 --loader fabric --collection HO2OnfaY
+   python modrinth_collection_downloader.py --version 1.21.10 --loader fabric --collection AZubsCAT
    ```
+   3. (Optional) you can also use the .bat file to quickly run the script. modify the version, loader and collection ids to your desired values.
 4. The script will download all mods from the specified Modrinth collection. Downloaded mods will be saved in a folder located alongside `modrinth_collection_downloader.py`.
 
 ### 💡 Example Configuration
 
-- **Minecraft Version:** `1.21.9` (or any other valid Minecraft version)
+- **Minecraft Version:** `1.21.10` (or any other valid Minecraft version)
 - **Loader:** `fabric`
-- **Collection ID:** `HO2OnfaY`
+- **Collection ID:** `AZubsCAT`
 
-![Screenshot 2025-06-24 115159](https://github.com/user-attachments/assets/4c7ad3f9-2737-4274-bc59-a44db5195566)
+<img width="513" height="171" alt="collection ID" src="https://github.com/user-attachments/assets/632a920a-3e83-4a02-9696-4287f8027743" />
 
 > **Note:** In previous versions of this script, you needed to manually edit the Python file to configure the version, loader, and collection ID. This is no longer necessary as the script now properly supports command-line arguments as the primary method of configuration.
 
@@ -76,7 +78,7 @@ C:\Users\YOURNAME\AppData\Roaming\.minecraft\
 ## 📖 Example
 
 ```bash
-python modrinth_collection_downloader.py --version 1.21.9 --loader fabric --collection HO2OnfaY
+python modrinth_collection_downloader.py --version 1.21.10 --loader fabric --collection AZubsCAT
 ```
 
 ### 💡 Additional Arguments
@@ -256,13 +258,15 @@ NO, this script is not a virus. It is open-source and you can read all the code 
 
 The script supports **any Minecraft version** that is available on Modrinth collections. This includes but is not limited to:
 
-| 1.21.9   | 1.20.4 | 1.19.3 | 1.18.1 | 1.17   |
+| 1.21.XX+ | 1.20.4 | 1.19.3 | 1.18.1 | 1.17   |
 |----------|--------|--------|--------|--------|
-| 1.21.8   | 1.20.3 | 1.19.2 | 1.18   | 1.16.5 |
-| 1.21.7   | 1.20.2 | 1.19.1 | 1.17.1 | 1.16.4 |
-| 1.21.6   | 1.20.1 | 1.19   | 1.16.5 | 1.16.3 |
-| 1.21.5   | 1.20   | 1.18.2 | 1.16.2 | 1.16.1 |
-| 1.21.4   | 1.19.4 | 1.18   | 1.16   |        |
+| 1.21.10  | 1.20.3 | 1.19.2 | 1.18   | 1.16.5 |
+| 1.21.9   | 1.20.2 | 1.19.1 | 1.17.1 | 1.16.4 |
+| 1.21.8   | 1.20.1 | 1.19   | 1.16.5 | 1.16.3 |
+| 1.21.7   | 1.20   | 1.18.2 | 1.16.2 | 1.16.1 |
+| 1.21.6   | 1.19.4 | 1.18   | 1.16   |        |
+| 1.21.5   |        |        |        |        |
+| 1.21.4   |        |        |        |        |
 | 1.21.3   |        |        |        |        |
 | 1.21.2   |        |        |        |        |
 | 1.21.1   |        |        |        |        |
