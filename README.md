@@ -11,7 +11,7 @@ Tired of downloading your mods one by one? This Python script is perfect for you
 
 
 
-A modern Python script to **automatically download and update mods** from a [Modrinth](https://modrinth.com) collection, tailored to your chosen Minecraft version and mod loader (e.g., Fabric, Forge, Quilt).
+A modern Python script to **automatically download and update mods and resource packs** from a [Modrinth](https://modrinth.com) collection, tailored to your chosen Minecraft version and mod loader (e.g., Fabric, Forge, Quilt).
 
 This script streamlines the management of large modpacks by fetching mods directly via Modrinth's API and organizing them locally.
 
@@ -24,6 +24,13 @@ This script streamlines the management of large modpacks by fetching mods direct
 - Automatically skip or update existing mods
 - Multithreaded downloads for faster performance
 - Clean, consistent file naming using mod IDs
+- Optional resource pack downloading
+- Download latest version when no version is specified
+- Separate directories for mods and resource packs
+- Proper naming for resource packs (using their display names)
+- Detailed statistics showing separate counts for mods and resource packs plus aggregated totals
+- Convenient batch files for common download scenarios
+- Separate log files for mods and resource packs
 
 ---
 
@@ -44,11 +51,45 @@ This script streamlines the management of large modpacks by fetching mods direct
    python modrinth_collection_downloader.py --version 1.21.10 --loader fabric --collection AZubsCAT
    ```
    3. (Optional) you can also use the .bat file to quickly run the script. modify the version, loader and collection ids to your desired values.
-4. The script will download all mods from the specified Modrinth collection. Downloaded mods will be saved in a folder located alongside `modrinth_collection_downloader.py`.
+   
+   To download resource packs in addition to mods:
+   ```bash
+   python modrinth_collection_downloader.py --version 1.21.10 --loader fabric --collection AZubsCAT --include-resourcepacks
+   ```
+   
+   To download the latest compatible versions (without specifying a version):
+   ```bash
+   python modrinth_collection_downloader.py --loader fabric --collection AZubsCAT
+   ```
+
+4. The script will download all mods from the specified Modrinth collection. 
+   - Mods are saved in the `mods` folder
+   - Resource packs are saved in the `resourcepacks` folder (when `--include-resourcepacks` is used)
+
+### 📁 Batch Files for Quick Execution
+
+For convenience, three batch files are included to quickly run common download scenarios:
+
+- **[run_download_latest.bat]** - Downloads latest compatible versions without specifying a version
+- **[run_download_with_resourcepacks.bat]** - Downloads both mods and resource packs for a specific version
+- **[run_download_latest_with_resourcepacks.bat]** - Downloads latest versions of both mods and resource packs
+
+To use these batch files:
+1. Edit the file with a text editor
+2. Replace `AZubsCAT` with your actual Modrinth collection ID
+3. Optionally change the version and loader as needed
+4. Double-click the batch file to run it
+
+### 📝 Log Files
+
+The script creates separate log files for mods and resource packs to help you track what was downloaded:
+
+- **Mod logs:** Stored in `modrinth_collection_downloader_logs/` with `downloaded_mods_logs.txt`, `no_version_found_for_mods_logs.txt`, etc.
+- **Resource pack logs:** Stored in `modrinth_collection_downloader_logs/` with `downloaded_resourcepacks_logs.txt`, `no_version_found_for_resourcepacks_logs.txt`, etc.
 
 ### 💡 Example Configuration
 
-- **Minecraft Version:** `1.21.10` (or any other valid Minecraft version)
+- **Minecraft Version:** `1.21.10` (or any other valid Minecraft version, or omit to download latest)
 - **Loader:** `fabric`
 - **Collection ID:** `AZubsCAT`
 
@@ -86,6 +127,8 @@ python modrinth_collection_downloader.py --version 1.21.10 --loader fabric --col
 - **API Base URL:** `--api-base-url` - Specify a custom Modrinth API base URL (default: https://api.modrinth.com)
 - **Update Mode:** `-u` or `--update` - Download and update existing mods
 - **Download Directory:** `-d` or `--directory` - Specify where to download mods (default: "./mods")
+- **Include Resource Packs:** `--include-resourcepacks` - Also download resource packs from the collection (saved in ./resourcepacks/)
+- **Version (Optional):** `-v` or `--version` - Specify Minecraft version, or omit to download latest compatible versions
 
 ---
 
@@ -94,7 +137,9 @@ python modrinth_collection_downloader.py --version 1.21.10 --loader fabric --col
 <details>
 <summary><strong>Where do the mods get downloaded?</strong></summary>
 
-Mods are saved in a folder next to the script, named according to your configuration.
+Mods are saved in a folder next to the script, named according to your configuration:
+- Mods are saved in the `mods` directory
+- Resource packs are saved in the `resourcepacks` directory (when enabled)
 
 </details>
 
@@ -148,6 +193,7 @@ import argparse
 - `download_file(url, filename)`: Downloads a file from a URL to a local filename.
 - `get_mod_version(mod_id)`: Gets all versions for a mod.
 - `get_collection(collection_id)`: Gets details for a collection.
+- `get_minecraft_versions()`: Gets list of available Minecraft versions.
 
 ---
 
@@ -166,6 +212,7 @@ import argparse
 - **Download directory** (`-d`)
 - **Update mode** (`-u`)
 - **API Base URL** (`--api-base-url`)
+- **Include Resource Packs** (`--include-resourcepacks`)
 
 **Validation:** The script validates both loader and version parameters to ensure they meet expected formats.
 
@@ -177,42 +224,52 @@ import argparse
 
 ```python
 LOG_DIR = "modrinth_collection_downloader_logs"
-LOG_DOWNLOADED = "downloaded_mods_logs.txt"
-LOG_UPDATED = "updated_mods_logs.txt"
-LOG_NO_VERSION = "no_version_found_for_mods_logs.txt"
+LOG_MODS_DOWNLOADED = "downloaded_mods_logs.txt"
+LOG_MODS_UPDATED = "updated_mods_logs.txt"
+LOG_MODS_NO_VERSION = "no_version_found_for_mods_logs.txt"
+LOG_RPS_DOWNLOADED = "downloaded_resourcepacks_logs.txt"
 ```
 
 - **Ensures the log directory exists** and appends timestamped log messages to the appropriate log file.
+- **Separate logs for mods and resource packs** for better organization.
 
 ---
 
 ## 7. 📂 Download Directory Setup
 
 - **Purpose:** Ensures the mod download directory exists before downloading mods.
+- **Resource Packs:** Creates a separate `resourcepacks` directory when resource packs are included.
 
 ---
 
-## 8. 🔍 Existing Mods Detection
+## 8. 🔍 Existing Mods/Resource Packs Detection
 
-- **Purpose:** Scans the download directory for existing mod files, extracting mod IDs from filenames.
+- **Purpose:** Scans the download directories for existing files.
+- **Mods:** Extracts mod IDs from filenames for version checking.
+- **Resource Packs:** Uses full filenames since resource packs don't have IDs.
 
 ---
 
 ## 9. ⬇️ Latest Version Fetching
 
-- **Purpose:** Fetches all versions for a mod and selects the latest one matching the specified Minecraft version and loader.
+- **Purpose:** Fetches all versions for a mod/resource pack and selects the latest one matching the specified Minecraft version and loader.
 - **Enhanced Error Handling:** Improved error handling and data structure validation.
+- **Latest Version Support:** When no version is specified, downloads the latest version compatible with the loader.
+- **Resource Pack Handling:** More flexible version matching for resource packs since they often don't have specific loaders.
+- **Minecraft Version Detection:** Automatically detects the latest Minecraft version for strict compatibility.
 
 ---
 
-## 10. 🚚 Downloading/Updating Mods
+## 10. 🚚 Downloading/Updating Mods and Resource Packs
 
-**Purpose:** Downloads or updates a mod:
+**Purpose:** Downloads or updates mods and resource packs:
 - Checks if the latest version is already present.
 - Downloads the latest version if needed.
 - Removes old versions if updating.
 - Logs all actions and errors.
 - **Atomic Operations:** Uses atomic file operations to prevent corruption during updates.
+- **Separate Handling:** Mods and resource packs are handled separately with different naming conventions.
+- **Strict Version Compatibility:** Only downloads content that supports the latest Minecraft version when no version is specified.
 
 ---
 
@@ -220,13 +277,31 @@ LOG_NO_VERSION = "no_version_found_for_mods_logs.txt"
 
 **Purpose:** Orchestrates the download/update process:
 - Fetches the collection details.
-- Gets the list of mods in the collection.
-- Detects existing mods.
-- Uses a thread pool to download/update all mods in parallel.
+- Gets the list of mods and resource packs in the collection.
+- Detects existing mods/resource packs.
+- Uses a thread pool to download/update all items in parallel.
+- **Resource Pack Support:** Optionally includes resource packs in the download with separate handling.
+- **Separate Log Files:** Uses different log files for mods and resource packs.
 
 ---
 
-## 12. ▶️ Script Entry Point
+## 12. 📊 Comprehensive Statistics Display
+
+**Purpose:** Shows detailed statistics at the end of the download process:
+- Total projects checked (mods + resource packs)
+- Separate detailed counts for mods and resource packs:
+  - Checked
+  - Already exist
+  - No version found
+  - Newly downloaded
+  - Updated
+- Aggregated project statistics (totals for all categories)
+- Clear, formatted output for easy understanding
+- Detailed breakdown helps users understand exactly what was processed
+
+---
+
+## 13. ▶️ Script Entry Point
 
 **Purpose:** Runs the main function, handles unexpected errors, and waits for user input before exiting.
 - **User-Friendly Exit:** Script now pauses at the end of both successful runs and error cases, waiting for user input before closing.
@@ -237,11 +312,15 @@ LOG_NO_VERSION = "no_version_found_for_mods_logs.txt"
 
 - **What it does:**  
   Downloads and updates all mods from a specified Modrinth collection for a given Minecraft version and loader, with logging and safe updating.
+  Optionally downloads resource packs to a separate directory with proper naming.
 
 - **How to use:**
   1. Run the script with command-line arguments for version, loader, and collection.
-  2. Mods are downloaded/updated in the specified directory.
-  3. Logs are saved in the `modrinth_collection_downloader_logs` directory.
+  2. Mods are downloaded/updated in the `mods` directory.
+  3. Resource packs are downloaded in the `resourcepacks` directory (when enabled).
+  4. Logs are saved in the `modrinth_collection_downloader_logs` directory with separate files for mods and resource packs.
+  5. Detailed statistics are displayed at the end showing separate counts for mods and resource packs plus aggregated totals.
+  6. Convenient batch files are provided for common download scenarios.
 
 ---
 

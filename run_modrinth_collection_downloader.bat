@@ -1,1 +1,0 @@
-python ./modrinth_collection_downloader.py --version 1.21.10 --loader fabric --collection AZubsCAT
