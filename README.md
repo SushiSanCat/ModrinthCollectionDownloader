@@ -3,6 +3,16 @@
 Tired of downloading your mods one by one? This Python script is perfect for you!
 
 
+![Version](https://img.shields.io/badge/Minecraft-1.21%2B-green?style=for-the-badge)
+![Forks](https://img.shields.io/github/forks/SushiSanCat/ModrinthCollectionDownloader?style=for-the-badge&logo=git)
+![Total Downloads](https://img.shields.io/github/downloads/SushiSanCat/ModrinthCollectionDownloader/total?style=for-the-badge&logo=github)
+![Latest Release](https://img.shields.io/github/v/release/SushiSanCat/ModrinthCollectionDownloader?style=for-the-badge&logo=github)
+![Last Commit](https://img.shields.io/github/last-commit/SushiSanCat/ModrinthCollectionDownloader?style=for-the-badge&logo=github)
+![Repo Size](https://img.shields.io/github/repo-size/SushiSanCat/ModrinthCollectionDownloader?style=for-the-badge&logo=github)
+![Top Language](https://img.shields.io/github/languages/top/SushiSanCat/ModrinthCollectionDownloader?style=for-the-badge&logo=python)
+![Contributors](https://img.shields.io/github/contributors/SushiSanCat/ModrinthCollectionDownloader?style=for-the-badge&logo=people)
+
+
 
 ## Example of what it looks like on usage:
 ![GIF](https://i.imgur.com/hFvhyWp.gif)
