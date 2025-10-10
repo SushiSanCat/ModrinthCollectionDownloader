@@ -1,6 +1,6 @@
 # 🔃 Modrinth Collection Downloader
 ![Modrinth Collection Downloader Design1](https://github.com/user-attachments/assets/2bd97296-b995-48a8-b71b-1f42ded61661)
-Tired of downloading your mods one by one? This Python script is perfect for you!
+Tired of downloading your mods and resource pack one by one? This Python script is perfect for you!
 
 
 ![Version](https://img.shields.io/badge/Minecraft-1.21%2B-green?style=for-the-badge)
@@ -72,7 +72,7 @@ This script streamlines the management of large modpacks by fetching mods direct
    python modrinth_collection_downloader.py --loader fabric --collection AZubsCAT
    ```
 
-4. The script will download all mods from the specified Modrinth collection. 
+4. The script will download all mods/resource pack from the specified Modrinth collection. 
    - Mods are saved in the `mods` folder
    - Resource packs are saved in the `resourcepacks` folder (when `--include-resourcepacks` is used)
 
